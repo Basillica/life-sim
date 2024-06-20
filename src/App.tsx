@@ -105,7 +105,7 @@ const App: Component = () => {
                                     type="checkbox"
                                     id="starve_lions"
                                     name="scales"
-                                    checked
+                                    checked={canLionsStarve()}
                                     onClick={() => starveLions(!canLionsStarve())}
                                 />
                                 <label for="starve_lions">Can Lions Starve?</label>

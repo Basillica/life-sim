@@ -137,6 +137,28 @@ export const People: Component<{
         }
     }, [props.start]);
 
+    function star(ctx, R, X, Y, N) {
+        ctx.beginPath();
+        ctx.moveTo(X + R, Y);
+        for (var i = 1; i <= N * 2; i++) {
+            if (i % 2 == 0) {
+                var theta = (i * (Math.PI * 2)) / (N * 2);
+                var x = X + R * Math.cos(theta);
+                var y = Y + R * Math.sin(theta);
+            } else {
+                var theta = (i * (Math.PI * 2)) / (N * 2);
+                var x = X + (R / 2) * Math.cos(theta);
+                var y = Y + (R / 2) * Math.sin(theta);
+            }
+            ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+        ctx.fillStyle = "green";
+        ctx.stroke();
+    }
+
     const animate = () => {
         context.clearRect(0, 0, width, height);
         for (const f of food) {
@@ -167,7 +189,7 @@ export const People: Component<{
             let x = (lion.px[0] += dx);
             let y = (lion.py[0] += dy);
             let speed = Math.sqrt(dx * dx + dy * dy);
-            const count = speed * 10;
+            const count = speed * 5;
             const k1 = -5 - speed / 3;
 
             // Bounce off the walls.
@@ -201,7 +223,7 @@ export const People: Component<{
             let y = (person.py[0] += dy);
             let speed = Math.sqrt(dx * dx + dy * dy);
             // const count = speed * 10;
-            const count = speed * 10;
+            const count = speed * person.strenght;
             const k1 = -5 - speed / 3;
 
             // Bounce off the walls.
@@ -233,7 +255,7 @@ export const People: Component<{
                     isInRange(Math.round(x), Math.round(lion.px[0]), 3) &&
                     isInRange(Math.round(y), Math.round(lion.py[0]), 3)
                 ) {
-                    person.strenght -= 2;
+                    person.strenght -= 1;
                     if (person.strenght < 0) {
                         people.splice(people.indexOf(person), 1);
                         props.setStats({
@@ -257,7 +279,7 @@ export const People: Component<{
             context.beginPath();
             context.moveTo(person.px[0], person.py[0]);
             for (let i = 1; i < m; ++i) context.lineTo(person.px[i], person.py[i]);
-            context.lineWidth = 2;
+            context.lineWidth = 1;
             context.stroke();
 
             // sim
@@ -304,7 +326,7 @@ export const People: Component<{
 
                         if (props.canLionsStarve()) {
                             for (const lion of lions) {
-                                lion.strenght -= 10;
+                                lion.strenght -= 50;
                                 if (lion.strenght < 2) {
                                     lions.splice(lions.indexOf(lion), 1);
                                     props.setStats({
